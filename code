@@ -1,0 +1,94 @@
+import gradio as gr
+import pandas as pd
+import numpy as np
+from joblib import load
+
+# Function to predict disease based on symptoms
+def predict_disease(symptoms):
+    disease_map = {
+         "cancer": {"Unexplained weight loss", "Persistent fatigue", "Changes in the skin"},
+        "Fungal Infection": {"itching", "skin_rash", "nodal_skin_eruptions"},
+        "Chronic cholestasis": {"itching", "vomiting", "yellowing_of_eyes"},
+        "Drug reaction": {"itching", "skin_rash", "stomach_pain"},
+        "Jaundice": {"vomiting", "dark_urine", "yellowish_skin"},
+        "Chicken Pox": {"itching", "skin_rash", "red_spots_over_body"},
+        "Hepatitis B": {"itching", "receiving_unsterile_injections", "receiving_blood_transfusion"},
+        "Alcoholic hepatitis": {"vomiting", "fluid_overload", "distention_of_abdomen"},
+        "Pneumonia": {"rusty_sputum", "fast_heart_rate", "chest_pain"},
+        "Dimorphic hemmorhoids(piles)": {"pain_during_bowel_movements", "pain_in_anal_region", "bloody_stool"},
+        "Heart attack": {"vomiting", "breathlessness", "sweating"},
+        "Varicose veins": {"prominent_veins_on_calf", "cramps", "obesity"},
+        "Hyperthyroidism": {"irritability", "muscle_weakness", "excessive_hunger"},
+        "Hypoglycemia": {"palpitations", "vomiting", "slurred_speech"},
+        "Osteoarthristis": {"swelling_joints", "joint_pain", "knee_pain"},
+        "Arthritis": {"movement_stiffness", "stiff_neck", "swelling_joints"},
+        "(vertigo) Paroymsal Positional Vertigo": {"spinning_movements", "loss_of_balance", "vomiting"},
+        "Acne": {"skin_rash", "pus_filled_pimples", "blackheads"},
+        "Urinary tract infection": {"continuous_feel_of_urine", "bladder_discomfort", "foul_smell_of_urine"},
+        "Psoriasis": {"skin_rash", "small_dents_in_nails", "inflammatory_nails"},
+        "Impetigo": {"skin_rash", "blister", "yellow_crust_ooze"},
+        "Migraine": {"acidity", "excessive_hunger", "stiff_neck"},
+        "Cervical spondylosis": {"loss_of_balance", "weakness_in_limbs", "neck_pain"},
+        "Paralysis (brain hemorrhage)": {"weakness_of_one_body_side", "headache", "vomiting"},
+        "Malaria": {"vomiting", "muscle_pain", "diarrhoea"},
+        "Dengue": {"skin_rash", "chills", "joint_pain"},
+        "Typhoid": {"itching", "vomiting", "high_fever"},
+        "Hepatitis A": {"joint_pain", "muscle_pain", "nausea"},
+        "Hepatitis C": {"yellowish_skin", "nausea", "loss_of_appetite"},
+        "Hepatitis D": {"dark_urine", "nausea", "loss_of_appetite"},
+        "Hepatitis E": {"stomach_bleeding", "abdominal_pain", "yellowing_of_eyes"},
+        "Tuberculosis": {"itching", "chest_pain", "malaise"},
+        "Common Cold": {"continuous_sneezing", "chills", "muscle_pain"},
+        "AIDS": {"patches_in_throat", "extra_marital_contacts", "high_fever"}
+    }
+
+    selected_symptoms = set(symptoms)
+    matching_diseases = [disease for disease, disease_symptoms in disease_map.items() if disease_symptoms.issubset(selected_symptoms)]
+
+    if not matching_diseases:
+        return "No matching disease found. Please try with different symptoms."
+
+    return ", ".join(matching_diseases)
+
+# Define the Gradio interface
+def create_interface():
+    symptoms_list = sorted([
+        "Unexplained weight loss", "Persistent fatigue", "Changes in the skin",
+        "acidity", "abdominal_pain", "abnormal_menstruation", "altered_sensorium", "anxiety", "back_pain", "belly_pain",
+        "bladder_discomfort", "blackheads", "blister", "bloody_stool", "blurred_and_distorted_vision", "breathlessness",
+        "brittle_nails", "burning_micturition", "chest_pain", "chills", "continuous_feel_of_urine", "continuous_sneezing",
+        "cough", "cramps", "dark_urine", "dehydration", "depression", "diarrhoea", "dizziness", "drying_and_tingling_lips",
+        "enlarged_thyroid", "excessive_hunger", "extra_marital_contacts", "family_history", "fast_heart_rate", "fatigue",
+        "fluid_overload", "fluid_overload.1", "foul_smell_of_urine", "headache", "high_fever", "hip_joint_pain",
+        "history_of_alcohol_consumption", "indigestion", "inflammatory_nails", "internal_itching", "irregular_sugar_level",
+        "irritability", "irritation_in_anus", "itching", "joint_pain", "knee_pain", "lack_of_concentration", "lethargy",
+        "loss_of_appetite", "loss_of_balance", "loss_of_smell", "malaise", "mild_fever", "mood_swings", "movement_stiffness",
+        "muscle_pain", "muscle_weakness", "muscle_wasting", "nausea", "neck_pain", "nodal_skin_eruptions", "obesity",
+        "pain_behind_the_eyes", "pain_during_bowel_movements", "pain_in_anal_region", "painful_walking", "palpitations",
+        "patches_in_throat", "phlegm", "polyuria", "prominent_veins_on_calf", "puffy_face_and_eyes", "pus_filled_pimples",
+        "red_sore_around_nose", "red_spots_over_body", "redness_of_eyes", "restlessness", "runny_nose", "rusty_sputum",
+        "scurring", "shivering", "silver_like_dusting", "sinus_pressure", "skin_peeling", "skin_rash", "slurred_speech",
+        "small_dents_in_nails", "spinning_movements", "spotting_urination", "stiff_neck", "stomach_bleeding",
+        "stomach_pain", "sunken_eyes", "swelled_lymph_nodes", "swelling_joints", "swelling_of_stomach", "swollen_blood_vessels",
+        "swollen_extremeties", "swollen_legs", "toxic_look_(typhos)", "ulcers_on_tongue", "unsteadiness", "vomiting",
+        "watering_from_eyes", "weakness_in_limbs", "weakness_of_one_body_side", "weight_gain", "weight_loss", "yellow_crust_ooze",
+        "yellow_urine", "yellowing_of_eyes", "yellowish_skin"
+    ])
+
+    # Create a Gradio checkbox list with a submit button
+    gradio_interface = gr.Interface(
+        fn=predict_disease,
+        inputs=gr.CheckboxGroup(
+            choices=symptoms_list,
+            label="Select symptoms"
+        ),
+        outputs="text",
+        live=False  # Disable live updates
+    )
+
+    return gradio_interface
+
+# Create and launch the Gradio interface
+if _name_ == "_main_":
+    interface = create_interface()
+    interface.launch()
