@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Web Interface</title>
+    <style>
+        /* Style for the body to add background image */
+        body {
+            background-image: url('https://penntoday.upenn.edu/sites/default/files/2018-05/istock-823493986.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+
+
+        }
+        .body-dark{
+height:100%
+width:100%
+background-color:black;
+opacity:0.6;
+}
+        /* Style for the menu bar */
+         nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color:rgba(0,0,0,0.1) ;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 5px 20px;
+            text-decoration: none;
+        }
+nav a {
+            float: right;
+            display: flex;
+font-size:20px;
+            color: white;
+            text-align: center;
+            padding: 35px 25px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #161517;
+height:20%;
+
+border-radius:70px;
+            color: white;
+        }
+
+
+        /* Style for the form container */
+        .form-container {
+background-color: azure ;
+            margin: 0;
+            padding: 35px;
+            border-radius: 25px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-container input[type="text"], .form-container input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Style for the contact doctor button */
+        .contact-doctor {
+            margin-top: 20px;
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .contact-doctor:hover {
+            background-color:navy;
+color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="body">
+<div class="body-dark"></div>
+</div>
+
+         <!-- Menu Bar -->
+    <nav>
+        <a href="about.html">About Us</a> <!-- Link to another page -->
+ <a href="disease.html">Disease prediction</a>
+
+<a href="12.html">Home</a>
+
+    </nav>
+
+    <!-- Home Section -->
+    <div id="home">
+        <div class="form-container">
+            <h3>Please enter your details</h3>
+            <form action= "https://3182d5bda0451dc62d.gradio.live
+
+
+
+" method="GET">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+
+                <input type="submit" value="Submit">
+            </form>
+
+            <h3>For online consultation, click below!</h3>
+            <button class="contact-doctor" onclick="window.location.href='https://www.apollohospitals.com';">Consult</button>
+        </div>
+    </div>
+
+</body>
+</html>
